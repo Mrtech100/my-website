@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Underscore_tech Pro | POS, CCTV, Antivirus & IT Support — Beirut, Lebanon</title>
+  <meta name="description" content="Professional IT services in Beirut, Lebanon. POS systems, CCTV installation, antivirus, app deployment and 24/7 remote & on-site support. Call +961 3 985 722.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --navy: #050f1c;
+      --navy-mid: #0b1e33;
+      --navy-light: #112840;
+      --cyan: #00d4ff;
+      --cyan-dim: rgba(0,212,255,0.12);
+      --cyan-glow: rgba(0,212,255,0.35);
+      --white: #f0f6ff;
+      --muted: #7a9bb8;
+      --card: rgba(11,30,51,0.7);
+      --border: rgba(0,212,255,0.15);
+      --border-soft: rgba(255,255,255,0.06);
+      --green: #22c55e;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--navy);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(5,15,28,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1.1rem 2rem; }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .logo-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--cyan), #0099cc);
+      border-radius: 12px;
+      width: 38px;
+      height: 38px;
+      box-shadow: 0 4px 12px rgba(0,212,255,0.3);
+      transition: transform 0.2s ease;
+    }
+    .logo-icon i {
+      font-size: 1.5rem;
+      color: var(--navy);
+    }
+    .logo:hover .logo-icon {
+      transform: scale(1.02);
+      box-shadow: 0 6px 16px rgba(0,212,255,0.5);
+    }
+    .logo-text {
+      display: inline-block;
+    }
+    .logo .accent { color: var(--cyan); }
+    .nav-links { display: flex; gap: 2.5rem; align-items: center; list-style: none; }
+    .nav-links a { font-size: 0.88rem; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cta { background: var(--cyan); color: var(--navy) !important; font-weight: 700 !important; padding: 0.6rem 1.4rem; border-radius: 6px; font-size: 0.85rem !important; transition: all 0.2s !important; }
+    .nav-cta:hover { background: white !important; transform: translateY(-1px); box-shadow: 0 4px 20px var(--cyan-glow); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+
+    .drawer {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(320px, 100vw);
+      height: 100%;
+      background: var(--navy-mid);
+      border-left: 1px solid var(--border);
+      z-index: 2000;
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .drawer.open { right: 0; }
+    .drawer-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .drawer a { display: block; padding: 0.9rem 1rem; font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--white); text-decoration: none; border-radius: 8px; transition: all 0.2s; }
+    .drawer a:hover { background: var(--cyan-dim); color: var(--cyan); }
+    .close-btn { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .overlay.active { opacity: 1; pointer-events: all; }
+
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+
+    section { padding: 6rem 0; position: relative; z-index: 1; }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.7;
+      margin-bottom: 3.5rem;
+    }
+
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+      overflow: hidden;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      width: 100%;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid var(--border);
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+    .hero-h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+    }
+    .hero-h1 .highlight {
+      color: transparent;
+      -webkit-text-stroke: 1.5px var(--cyan);
+    }
+    .hero-p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--cyan);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: var(--font-body);
+    }
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--cyan-glow);
+    }
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: transparent;
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: var(--font-body);
+    }
+    .btn-ghost:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: var(--cyan-dim);
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+    }
+    .stat-num {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--cyan);
+      display: block;
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .stat-label { font-size: 0.8rem; color: var(--muted); }
+
+    /* REMOVED: hero-visual, draggable-card, hero-card and everything related to system status window */
+    /* No hero-visual styles left — the right column is hidden/empty */
+    
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+      /* No visual column to worry about */
+    }
+
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+    .svc-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 16px; padding: 2rem 1.7rem; transition: all 0.3s; cursor: default; position: relative; overflow: hidden; }
+    .svc-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--cyan), transparent); opacity: 0; transition: opacity 0.3s; }
+    .svc-card:hover { border-color: var(--border); transform: translateY(-6px); background: rgba(0,212,255,0.05); }
+    .svc-card:hover::before { opacity: 1; }
+    .svc-icon { width: 48px; height: 48px; background: var(--cyan-dim); border: 1px solid var(--border); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: var(--cyan); margin-bottom: 1.2rem; }
+    .svc-name { font-family: var(--font-display); font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 0.5rem; }
+    .svc-desc { font-size: 0.87rem; color: var(--muted); line-height: 1.6; }
+
+    .detail-section { border-top: 1px solid var(--border-soft); padding: 4rem 0; }
+    .detail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+    .detail-row.reverse { direction: rtl; }
+    .detail-row.reverse > * { direction: ltr; }
+    .detail-icon-block { background: var(--card); border: 1px solid var(--border); border-radius: 24px; padding: 3rem; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; position: relative; overflow: hidden; }
+    .detail-big-icon { font-size: 4rem; color: var(--cyan); position: relative; z-index: 1; }
+    .detail-h3 { font-family: var(--font-display); font-size: 1.9rem; font-weight: 800; color: var(--white); letter-spacing: -0.03em; margin-bottom: 1rem; }
+    .detail-p { font-size: 0.97rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.5rem; }
+    .feature-list { list-style: none; margin-bottom: 2rem; display: flex; flex-direction: column; gap: 0.6rem; }
+    .feature-list li { display: flex; align-items: center; gap: 0.7rem; font-size: 0.9rem; color: var(--white); }
+    .feature-list li i { color: var(--cyan); font-size: 0.8rem; }
+    @media (max-width: 700px) { .detail-row { grid-template-columns: 1fr; gap: 2rem; } .detail-row.reverse { direction: ltr; } }
+
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .pricing-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 20px; padding: 2.5rem 2rem; position: relative; transition: transform 0.3s; }
+    .pricing-card.featured { border-color: var(--border); background: linear-gradient(145deg, rgba(0,212,255,0.08), rgba(0,212,255,0.02)); }
+    .best-value { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--cyan); color: var(--navy); font-size: 0.72rem; font-weight: 800; padding: 0.3rem 1rem; border-radius: 100px; white-space: nowrap; }
+    .plan-icon { width: 44px; height: 44px; background: var(--cyan-dim); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--cyan); margin-bottom: 1.2rem; }
+    .plan-name { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; color: var(--white); margin-bottom: 0.3rem; }
+    .plan-price { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; color: var(--white); letter-spacing: -0.04em; margin: 1rem 0 0.3rem; }
+    .plan-features { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2rem; }
+    .plan-features li { display: flex; align-items: center; gap: 0.6rem; font-size: 0.87rem; color: var(--muted); }
+    .plan-features li i { color: var(--cyan); }
+    @media (max-width: 700px) { .pricing-grid { grid-template-columns: 1fr; } }
+
+    .support-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .support-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 20px; padding: 2.5rem; transition: all 0.3s; }
+    .support-card:hover { border-color: var(--border); transform: translateY(-4px); }
+    .support-icon { width: 52px; height: 52px; background: var(--cyan-dim); border: 1px solid var(--border); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--cyan); margin-bottom: 1.5rem; }
+    .response-badge { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 600; color: var(--green); background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25); padding: 0.3rem 0.8rem; border-radius: 100px; }
+    @media (max-width: 700px) { .support-grid { grid-template-columns: 1fr; } }
+
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; }
+    .testi-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 16px; padding: 2rem; }
+    .stars { color: var(--cyan); font-size: 0.9rem; margin-bottom: 1rem; letter-spacing: 2px; }
+    @media (max-width: 760px) { .testi-grid { grid-template-columns: 1fr; } }
+
+    .contact-layout { display: grid; grid-template-columns: 1fr 1.4fr; gap: 4rem; align-items: start; }
+    .contact-detail { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border-soft); }
+    .contact-detail-icon { width: 40px; height: 40px; background: var(--cyan-dim); border: 1px solid var(--border); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--cyan); flex-shrink: 0; }
+    .coverage-box { background: var(--card); border: 1px solid var(--border-soft); border-radius: 14px; padding: 1.2rem 1.5rem; margin-top: 1.5rem; display: flex; align-items: center; gap: 0.8rem; }
+    .form-card { background: var(--card); border: 1px solid var(--border-soft); border-radius: 20px; padding: 2.5rem; backdrop-filter: blur(20px); }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group input, .form-group select, .form-group textarea { background: rgba(255,255,255,0.04); border: 1px solid var(--border-soft); border-radius: 8px; padding: 0.8rem 1rem; color: var(--white); font-family: var(--font-body); font-size: 0.92rem; outline: none; transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus { border-color: var(--cyan); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-submit { width: 100%; padding: 1rem; background: var(--cyan); color: var(--navy); font-weight: 700; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.25s; font-family: var(--font-body); }
+    .form-submit:hover { background: white; transform: translateY(-2px); }
+    .form-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .spinner { display: none; width: 1.2rem; height: 1.2rem; border: 2px solid var(--navy); border-top-color: transparent; border-radius: 50%; animation: spin 0.6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .form-msg { display: none; text-align: center; padding: 1rem; border-radius: 8px; margin-top: 1rem; font-size: 0.85rem; }
+    .form-msg.success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+    .form-msg.error { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #f87171; }
+    @media (max-width: 860px) { .contact-layout { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } }
+
+    footer { background: var(--navy-mid); border-top: 1px solid var(--border-soft); padding: 3rem 0; }
+    .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1.5rem; }
+    .fab { position: fixed; bottom: 80px; right: 24px; background: #25D366; color: white; border-radius: 50px; padding: 0.8rem 1.4rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 700; z-index: 500; text-decoration: none; box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+    .sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--navy-mid); border-top: 1px solid var(--border); padding: 0.9rem 2rem; display: flex; justify-content: space-between; align-items: center; z-index: 499; transform: translateY(100%); transition: transform 0.3s; }
+    .sticky-bar.show { transform: translateY(0); }
+    .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(5,15,28,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border); z-index: 600; padding: 0.5rem 0; }
+    .mobile-nav-inner { display: flex; justify-content: space-around; }
+    .mobile-nav-item { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 0.4rem 1rem; color: var(--muted); text-decoration: none; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; }
+    .mobile-nav-item i { font-size: 1.2rem; }
+    .mobile-nav-item.cta-nav { background: var(--cyan); color: var(--navy); border-radius: 10px; padding: 0.4rem 1.2rem; }
+    @media (max-width: 860px) { .mobile-nav { display: block; } .fab { bottom: 75px; } body { padding-bottom: 60px; } }
+
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+    .toast { position: fixed; top: 90px; right: 24px; background: var(--navy-mid); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.4rem; display: flex; align-items: center; gap: 0.8rem; z-index: 9000; transform: translateX(120%); transition: transform 0.35s; box-shadow: 0 8px 30px rgba(0,0,0,0.4); }
+    .toast.show { transform: translateX(0); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="navbar">
+    <a href="#home" class="logo">
+      <div class="logo-icon"><i class="fas fa-microchip"></i></div>
+      <span class="logo-text">Underscore<span class="accent">_</span>tech</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#support">Support</a></li>
+      <li><a href="#contact" class="nav-cta">Book Now</a></li>
+    </ul>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="logo" style="display:flex; gap:0.5rem;"><div class="logo-icon" style="width:32px;height:32px;"><i class="fas fa-microchip"></i></div><span>Underscore<span class="accent">_</span>tech</span></span>
+    <button class="close-btn" id="closeDrawer"><i class="fas fa-times"></i></button>
+  </div>
+  <a href="#home">Home</a>
+  <a href="#services">Services</a>
+  <a href="#pricing">Pricing</a>
+  <a href="#support">Support</a>
+  <a href="#contact" style="background:var(--cyan); color:var(--navy); margin-top:1rem; text-align:center;">Book Now</a>
+</div>
+<div class="overlay" id="overlay"></div>
+
+<nav class="mobile-nav"><div class="mobile-nav-inner"><a href="#home" class="mobile-nav-item active"><i class="fas fa-home"></i>Home</a><a href="#services" class="mobile-nav-item"><i class="fas fa-cog"></i>Services</a><a href="#pricing" class="mobile-nav-item"><i class="fas fa-tag"></i>Pricing</a><a href="#contact" class="mobile-nav-item cta-nav"><i class="fas fa-bolt"></i>Book</a></div></nav>
+
+<div class="toast" id="toast"><i class="fas fa-check-circle"></i><span id="toastMsg">Request sent! We'll contact you within 1 hour.</span></div>
+
+<main>
+  <section id="home">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="container">
+      <div class="hero-inner">
+        <div>
+          <div class="hero-eyebrow"><span class="dot"></span>24/7 Remote &amp; On-Site Support</div>
+          <h1 class="hero-h1">Complete Tech<br>Solutions for<br><span class="highlight">Your Business</span></h1>
+          <p class="hero-p">POS systems, CCTV security, antivirus, app installs, and expert IT support — delivered fast across Beirut and all of Lebanon.</p>
+          <div class="hero-btns">
+            <a href="#contact" class="btn-primary"><i class="fas fa-bolt"></i> Get a Free Quote</a>
+            <a href="#support" class="btn-ghost"><i class="fas fa-headset"></i> Book Support</a>
+          </div>
+          <div class="hero-stats">
+            <div><span class="stat-num">&lt;30m</span><span class="stat-label">Response time</span></div>
+            <div><span class="stat-num">24/7</span><span class="stat-label">Always available</span></div>
+          </div>
+        </div>
+        <!-- System Status window / draggable card REMOVED completely -->
+        <div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="trust-bar"><div class="container"><div class="trust-inner" style="display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; padding: 2rem 0;"><div class="trust-item"><i class="fas fa-shield-alt"></i> Enterprise-grade security</div><div class="trust-item"><i class="fas fa-map-marker-alt"></i> Beirut &amp; nationwide remote</div><div class="trust-item"><i class="fas fa-clock"></i> 30-min response guarantee</div><div class="trust-item"><i class="fas fa-star"></i></div><div class="trust-item"><i class="fas fa-check-circle"></i> No fix, no fee</div></div></div></div>
+
+  <section id="services"><div class="container"><div class="reveal"><div class="tag"><i class="fas fa-cog"></i> What we offer</div><h2 class="section-title">End-to-end tech protection<br>&amp; installation</h2><p class="section-sub">Everything your business needs — from point-of-sale to cybersecurity — installed and supported .</p></div><div class="services-grid"><div class="svc-card"><div class="svc-icon"><i class="fas fa-cash-register"></i></div><div class="svc-name">POS Systems</div><div class="svc-desc">Modern touchscreen terminals with inventory tracking and payment integration.</div></div><div class="svc-card"><div class="svc-icon"><i class="fas fa-video"></i></div><div class="svc-name">CCTV Security</div><div class="svc-desc">4K IP cameras, night vision, remote viewing and on-site installation.</div></div><div class="svc-card"><div class="svc-icon"><i class="fas fa-mobile-alt"></i></div><div class="svc-name">App Installation</div><div class="svc-desc">Bulk deployment, MDM consulting and remote assistance for iOS &amp; Android.</div></div><div class="svc-card"><div class="svc-icon"><i class="fas fa-shield-virus"></i></div><div class="svc-name">Antivirus</div><div class="svc-desc">Ransomware protection, firewall configuration and malware removal.</div></div><div class="svc-card"><div class="svc-icon"><i class="fas fa-tools"></i></div><div class="svc-name">IT Support</div><div class="svc-desc">Fast ticket resolution via remote screen sharing or on-site visits.</div></div><div class="svc-card"><div class="svc-icon"><i class="fas fa-network-wired"></i></div><div class="svc-name">Network Setup</div><div class="svc-desc">Router configuration, cabling, Wi-Fi optimization for offices and stores.</div></div></div></div></section>
+
+  <div id="pos" class="detail-section"><div class="container"><div class="detail-row reveal"><div class="detail-icon-block"><i class="fas fa-cash-register detail-big-icon"></i></div><div class="detail-content"><div class="tag"><i class="fas fa-cash-register"></i> POS Systems</div><h3 class="detail-h3">Modern point-of-sale, zero headaches</h3><p class="detail-p">From standalone retail terminals to multi-location networks — we supply, install, configure and train your team on everything.</p><ul class="feature-list"><li><i class="fas fa-check-circle"></i> Touchscreen terminals &amp; receipt printers</li><li><i class="fas fa-check-circle"></i> Inventory &amp; stock management</li><li><i class="fas fa-check-circle"></i> Payment gateway integration</li><li><i class="fas fa-check-circle"></i> Staff training included</li></ul><a href="#contact" class="btn-primary">Request POS Demo <i class="fas fa-arrow-right"></i></a></div></div></div></div>
+
+  <div id="cctv" class="detail-section"><div class="container"><div class="detail-row reverse reveal"><div class="detail-icon-block"><i class="fas fa-video detail-big-icon"></i></div><div class="detail-content"><div class="tag"><i class="fas fa-video"></i> CCTV Security</div><h3 class="detail-h3">See everything, miss nothing</h3><p class="detail-p">Professional 4K camera systems with night vision, motion alerts and remote monitoring from your phone — installed same day.</p><ul class="feature-list"><li><i class="fas fa-check-circle"></i> 4K IP cameras &amp; NVR/DVR systems</li><li><i class="fas fa-check-circle"></i> Night vision &amp; motion detection</li><li><i class="fas fa-check-circle"></i> Remote mobile viewing</li><li><i class="fas fa-check-circle"></i> On-site cable management</li></ul><a href="#contact" class="btn-primary">Get Security Quote <i class="fas fa-arrow-right"></i></a></div></div></div></div>
+
+  <div id="app" class="detail-section"><div class="container"><div class="detail-row reveal"><div class="detail-icon-block"><i class="fas fa-mobile-alt detail-big-icon"></i></div><div class="detail-content"><div class="tag"><i class="fas fa-mobile-alt"></i> App Installation</div><h3 class="detail-h3">50 devices or 5 — we've got you covered</h3><p class="detail-p">Remote and on-site app deployment for teams of any size. Configuration, MDM consulting and troubleshooting included.</p><ul class="feature-list"><li><i class="fas fa-check-circle"></i> iOS &amp; Android bulk deployment</li><li><i class="fas fa-check-circle"></i> MDM configuration &amp; consulting</li><li><i class="fas fa-check-circle"></i> Remote assistance</li><li><i class="fas fa-check-circle"></i> Post-install support</li></ul><a href="#contact" class="btn-primary">Schedule App Setup <i class="fas fa-arrow-right"></i></a></div></div></div></div>
+
+  <div id="antivirus" class="detail-section"><div class="container"><div class="detail-row reverse reveal"><div class="detail-icon-block"><i class="fas fa-shield-virus detail-big-icon"></i></div><div class="detail-content"><div class="tag"><i class="fas fa-shield-virus"></i> Antivirus &amp; Cybersecurity</div><h3 class="detail-h3">Stop threats before they start</h3><p class="detail-p">Enterprise-grade protection without enterprise pricing. We remove existing threats and lock down your systems against future attacks.</p><ul class="feature-list"><li><i class="fas fa-check-circle"></i> Ransomware &amp; malware removal</li><li><i class="fas fa-check-circle"></i> Firewall configuration</li><li><i class="fas fa-check-circle"></i> Real-time threat monitoring</li><li><i class="fas fa-check-circle"></i> Security audits</li></ul><a href="#contact" class="btn-primary">Protect My Business <i class="fas fa-arrow-right"></i></a></div></div></div></div>
+
+  <section id="pricing"><div class="container"><div class="reveal" style="text-align:center;"><div class="tag"><i class="fas fa-tag"></i> Pricing</div><h2 class="section-title">Simple, transparent pricing</h2><p class="section-sub">No hidden fees. Pay only for what you need. Custom packages available for larger setups.</p><div class="pricing-note" style="margin:0 auto 2rem; display:inline-flex;"><i class="fas fa-info-circle"></i> All prices in <strong>Fresh USD</strong> — paid in cash or OMT transfer.</div></div><div class="pricing-grid"><div class="pricing-card"><div class="plan-icon"><i class="fas fa-laptop"></i></div><div class="plan-name">Remote Support</div><div class="plan-price">$30<sub>/session</sub></div><div class="plan-desc">One-time remote fix via screen share</div><ul class="plan-features"><li><i class="fas fa-check"></i> Software troubleshooting</li><li><i class="fas fa-check"></i> App configuration</li><li><i class="fas fa-check"></i> Virus removal</li></ul><a href="#contact" class="btn-ghost" style="display:block; text-align:center;">Get Started</a></div><div class="pricing-card featured"><div class="best-value">Most Popular</div><div class="plan-icon"><i class="fas fa-tools"></i></div><div class="plan-name">On-Site Visit</div><div class="plan-price">$50<sub>+ travel</sub></div><div class="plan-desc">Full hardware &amp; network fix at your location</div><ul class="plan-features"><li><i class="fas fa-check"></i> Hardware repair</li><li><i class="fas fa-check"></i> Network setup</li><li><i class="fas fa-check"></i> CCTV / POS install</li><li><i class="fas fa-check"></i> Same-day dispatch</li></ul><a href="#contact" class="btn-primary" style="display:block; text-align:center;">Book a Visit</a></div><div class="pricing-card"><div class="plan-icon"><i class="fas fa-shield-alt"></i></div><div class="plan-name">Complete Care</div><div class="plan-price" style="font-size:1.6rem;">Custom</div><div class="plan-desc">Full-service package tailored to your business</div><ul class="plan-features"><li><i class="fas fa-check"></i> Unlimited remote support</li><li><i class="fas fa-check"></i> 2 on-site visits/month</li><li><i class="fas fa-check"></i> Priority response</li><li><i class="fas fa-check"></i> Dedicated engineer</li></ul><a href="#contact" class="btn-ghost" style="display:block; text-align:center;">Contact Us</a></div></div></div></section>
+
+  <section id="support"><div class="container"><div class="reveal"><div class="tag"><i class="fas fa-headset"></i> Support</div><h2 class="section-title">Flexible support — remote<br>or right at your door</h2><p class="section-sub">We respond fast, fix properly and follow up. Your business can't afford downtime.</p></div><div class="support-grid"><div class="support-card"><div class="support-icon"><i class="fas fa-globe"></i></div><h3 class="support-h3">Remote Support</h3><p class="support-p">Screen sharing, remote diagnostics, software fixes and security scans — from anywhere in the world to your screen in minutes.</p><div class="response-badge"><i class="fas fa-clock"></i> Response within 30 minutes</div></div><div class="support-card"><div class="support-icon"><i class="fas fa-hard-hat"></i></div><h3 class="support-h3">On-Site Support</h3><p class="support-p">Hardware repairs, CCTV &amp; POS installation, network cabling — our engineers come to you with same-day dispatch across Beirut and Lebanon.</p><div class="response-badge"><i class="fas fa-map-marker-alt"></i> Same-day on-site dispatch</div></div></div><div style="text-align:center; margin-top:2rem;"><a href="#contact" class="btn-primary"><i class="fas fa-paper-plane"></i> Request Support Now</a></div></div></section>
+
+  <section><div class="container"><div class="reveal" style="text-align:center;"><div class="tag"><i class="fas fa-star"></i> Reviews</div><h2 class="section-title">Trusted by businesses</h2><p class="section-sub" style="margin:0 auto 3rem;">Real feedback from real clients across Lebanon.</p></div><div class="testi-grid"><div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"CCTV and POS installed in one day. The team was professional and the remote support follow-up was excellent."</p><div class="testi-author">Sarah M.</div><div class="testi-role">Retail Store Owner, Beirut</div></div><div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"The antivirus setup saved us from a ransomware attack. Fast response, great explanation and solid protection now."</p><div class="testi-author">Michael K.</div><div class="testi-role">Office Manager</div></div><div class="testi-card"><div class="stars">★★★★★</div><p class="testi-text">"App installation on 50+ devices done in under 2 hours remotely. Incredible efficiency and zero issues."</p><div class="testi-author">Priya A.</div><div class="testi-role">Operations Lead</div></div></div></div></section>
+
+  <section id="contact"><div class="container"><div class="contact-layout"><div class="reveal"><div class="tag"><i class="fas fa-paper-plane"></i> Get in touch</div><h2 class="section-title">Book support or get a free quote</h2><p class="section-sub">Fill the form and we'll get back to you within 1 hour — or reach out directly.</p><div class="contact-detail"><div class="contact-detail-icon"><i class="fas fa-phone-alt"></i></div><div class="contact-detail-text"><span>Phone</span><a href="tel:+9613985722">+961 3 985 722</a></div></div><div class="contact-detail"><div class="contact-detail-icon"><i class="fab fa-whatsapp"></i></div><div class="contact-detail-text"><span>WhatsApp</span><a href="https://wa.me/9613985722" target="_blank">+961 3 985 722</a></div></div><div class="contact-detail"><div class="contact-detail-icon"><i class="fas fa-envelope"></i></div><div class="contact-detail-text"><span>Email</span><a href="mailto:info@underscoretech.lb">info@underscoretech.lb</a></div></div><div class="coverage-box"><i class="fas fa-map-marked-alt"></i> Service areas: Beirut, Lebanon &amp; remote support nationwide</div></div><div class="form-card reveal reveal-delay-2"><div class="form-title">Book a Service</div><div class="form-sub">We'll confirm within 1 hour. All prices in Fresh USD.</div><form id="bookingForm"><div class="form-row"><div class="form-group"><label>Full Name *</label><input type="text" id="fullName" name="fullName" placeholder="Your name" required></div><div class="form-group"><label>Email *</label><input type="email" id="email" name="email" placeholder="you@example.com" required></div></div><div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="phone" name="phone" placeholder="+961 X XXX XXX"></div><div class="form-group"><label>Service needed</label><select id="service"><option>POS Systems</option><option>CCTV Security</option><option>App Installation</option><option>Antivirus / Cybersecurity</option><option>Remote IT Support</option><option>On-Site Support</option><option>Network Setup</option><option>Other</option></select></div><div class="form-group"><label>Preferred date &amp; time</label><input type="datetime-local" id="preferredDate"></div><div class="form-group"><label>Message</label><textarea id="message" rows="3" placeholder="Describe your issue or request..."></textarea></div><button type="submit" class="form-submit" id="submitBtn"><span id="btnText">Send Request</span><span class="spinner" id="spinner"></span><i class="fas fa-arrow-right" id="btnIcon"></i></button></form><div class="form-msg" id="formMsg"></div></div></div></div></section>
+</main>
+
+<footer><div class="container"><div class="footer-inner"><div class="footer-logo">Underscore<span class="accent">_</span>tech</div><div class="footer-links"><a href="#home">Home</a><a href="#services">Services</a><a href="#pricing">Pricing</a><a href="#contact">Contact</a></div><div class="footer-copy">© 2025 Underscore_tech Pro. All rights reserved.</div></div></div></footer>
+
+<a class="fab" href="https://wa.me/9613985722?text=Hello%20Underscore_tech%2C%20I%20need%20support" target="_blank"><i class="fab fa-whatsapp"></i> Chat on WhatsApp</a>
+
+<div class="sticky-bar" id="stickyBar"><p><strong>24/7 Support</strong> — We respond in under 30 minutes</p><a href="#contact" class="btn-primary" style="font-size:0.85rem; padding:0.6rem 1.2rem;">Book Now</a></div>
+
+<script>
+  (function() {
+    const EMAILJS_PUBLIC_KEY = "6aFup9x1u-vOQyqtz";
+    const EMAILJS_SERVICE_ID = "service_j09lk5n";
+    const EMAILJS_TEMPLATE_ID = "template_zj3m07k";
+    emailjs.init(EMAILJS_PUBLIC_KEY);
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => io.observe(el));
+    const hamburger = document.getElementById('hamburger');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+    const closeDrawerBtn = document.getElementById('closeDrawer');
+    if (hamburger) hamburger.addEventListener('click', () => { drawer.classList.add('open'); overlay.classList.add('active'); });
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('active'); });
+    if (overlay) overlay.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('active'); });
+    document.querySelectorAll('.drawer a').forEach(a => a.addEventListener('click', () => { drawer.classList.remove('open'); overlay.classList.remove('active'); }));
+    const stickyBar = document.getElementById('stickyBar');
+    window.addEventListener('scroll', () => { if (stickyBar) stickyBar.classList.toggle('show', window.scrollY > 500); });
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', function (e) {
+        const id = this.getAttribute('href');
+        if (id === '#') return;
+        const el = document.querySelector(id);
+        if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+    function showToast(msg, isError) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.textContent = msg;
+      const icon = toast.querySelector('i:first-child');
+      if (icon) icon.className = isError ? 'fas fa-exclamation-circle' : 'fas fa-check-circle';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+    const form = document.getElementById('bookingForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const formMsg = document.getElementById('formMsg');
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const service = document.getElementById('service').value;
+      const preferredDate = document.getElementById('preferredDate').value;
+      const message = document.getElementById('message').value.trim();
+      if (!fullName || !email) { showToast('Please fill in your name and email.', true); return; }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) { showToast('Please enter a valid email address.', true); return; }
+      submitBtn.disabled = true; spinner.style.display = 'inline-block'; btnIcon.style.display = 'none'; btnText.textContent = 'Sending...';
+      const templateParams = { from_name: fullName, from_email: email, phone: phone || "Not provided", service: service, preferred_date: preferredDate || "Not specified", message: message || "No additional message", reply_to: email };
+      try {
+        const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+        if (response.status === 200) {
+          form.reset(); formMsg.className = 'form-msg success'; formMsg.innerHTML = '<i class="fas fa-check-circle"></i> Request sent! We\'ll contact you within 1 hour.'; formMsg.style.display = 'block'; showToast('Request sent! We\'ll contact you within 1 hour.', false);
+          setTimeout(() => { formMsg.style.display = 'none'; }, 6000);
+        } else throw new Error('Failed');
+      } catch (error) {
+        formMsg.className = 'form-msg error'; formMsg.innerHTML = '<i class="fas fa-exclamation-circle"></i> Could not send message. Please <a href="https://wa.me/9613985722" target="_blank" style="color:var(--cyan);">contact us on WhatsApp</a> instead.'; formMsg.style.display = 'block'; showToast('Failed to send. Please try WhatsApp.', true);
+      } finally { submitBtn.disabled = false; spinner.style.display = 'none'; btnIcon.style.display = 'inline'; btnText.textContent = 'Send Request'; }
+    });
+  })();
+</script>
+</body>
+</html>
